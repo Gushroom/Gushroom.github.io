@@ -46,8 +46,8 @@
         		power = Math.pow(2,Math.ceil(Math.log(width)/(Math.log(2))));
         	
         	// set the start height and end height for the terrain
-        	points[0] = (height - (Math.random()*height/2))-displacement;
-        	points[power] = (height - (Math.random()*height/2))-displacement;
+        	points[0] = (height - (Math.random()*height/4))-displacement;
+        	points[power] = (height - (Math.random()*height/4))-displacement;
         
         	// create the rest of the points
         	for(var i = 1; i<power; i*=2){
