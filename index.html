@@ -110,7 +110,9 @@
         		this.x = Math.random()*width;
         		this.y = 0;
         		this.len = (Math.random()*80)+10;
-        		this.speed = (Math.random()*10)+6;
+        		// this.speed = (Math.random() > 0.5) ? (Math.random()*10)+6 : -((Math.random()*10)+6);
+				this.speedX = ((Math.random()-0.5)*16)
+				this.speedY = (Math.random()*10)+3
         		this.size = (Math.random()*1)+0.1;
             // this is used so the shooting stars arent constant
         		this.waitTime =  new Date().getTime() + (Math.random()*300)+500;
@@ -119,16 +121,24 @@
         	
         	ShootingStar.prototype.update = function(){
         		if(this.active){
-        			this.x-=this.speed;
-        			this.y+=this.speed;
+        			this.x-=this.speedX; // negative speed: -> 
+        			this.y+=this.speedY; // always goes down
         			if(this.x<0 || this.y >= height){
         			  this.reset();
         			}else{
-        			bgCtx.lineWidth = this.size;
-        				bgCtx.beginPath();
-        				bgCtx.moveTo(this.x,this.y);
-        				bgCtx.lineTo(this.x+this.len, this.y-this.len);
-        				bgCtx.stroke();
+						// Draw the star's tail
+						bgCtx.lineWidth = this.size;
+						bgCtx.beginPath();
+						bgCtx.moveTo(this.x, this.y);
+
+						// Calculate the direction of the tail based on speedX and speedY
+						let angle = Math.atan2(this.speedY, this.speedX);
+						let tailX = this.x + Math.cos(angle) * this.len;
+						let tailY = this.y - Math.sin(angle) * this.len;
+
+						// Draw the line from the current position to the tail end
+						bgCtx.lineTo(tailX, tailY);
+						bgCtx.stroke();
         			}
         		}else{
         			if(this.waitTime < new Date().getTime()){
@@ -146,6 +156,10 @@
           
         	// Add 2 shooting stars that just cycle.
         	entities.push(new ShootingStar());
+        	entities.push(new ShootingStar());
+			entities.push(new ShootingStar());
+        	entities.push(new ShootingStar());
+			entities.push(new ShootingStar());
         	entities.push(new ShootingStar());
         	
         	//animate background
