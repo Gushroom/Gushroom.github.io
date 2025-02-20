@@ -1,6 +1,6 @@
 ---
-title: Example Category
-description: A description of this category
+title: Study Notes
+description: Archive for notes and code blocks.
 image:
 
 # Badge style
