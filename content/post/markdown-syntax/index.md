@@ -1,6 +1,6 @@
 ---
 title: Markdown Syntax Guide
-date: 2025-02-20
+date: 2025-02-20 00:00:00+0000
 description: Sample article showcasing basic Markdown syntax and formatting for HTML elements.
 tags: 
     - markdown
@@ -147,3 +147,6 @@ X<sup>n</sup> + Y<sup>n</sup> = Z<sup>n</sup>
 Press <kbd>CTRL</kbd> + <kbd>ALT</kbd> + <kbd>Delete</kbd> to end the session.
 
 Most <mark>salamanders</mark> are nocturnal, and hunt for insects, worms, and other small creatures.
+
+## reference other pages
+[More on math typesetting]({{< ref "post/math-typesetting/" >}} "More on math typesetting")
