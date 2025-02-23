@@ -2,7 +2,7 @@
 title: Overview of NLP(LLM)
 description: Diving deeper into NLP(LLM) basics, from encoder to RLHF.
 math: true
-date: 2025-02-21
+date: 2025-02-23
 tags: 
     - Deep Learning
     - LLM
@@ -44,7 +44,7 @@ WIP...Not tooo interested in RNN and LSTM and GRU tho...
 ### Transformers
 #### Self Attention
 $$\tt{Attention}(\mathbf{Q, K, V}) = \tt{softmax} \lparen \frac{\mathbf{Q}\mathbf{K}^T}{\sqrt{d_k}} \rparen \mathbf{V}$$
-An interesting observation is $\mathbf{Q^TK}$ is matrix multiplication, but it is called "dot product" because it effectively computes row-wise similarity score, and dot product is usually used for that purpose.
+An interesting observation is $\mathbf{QK}^T$ is matrix multiplication, but it is called "dot product" because it effectively computes row-wise similarity score, and dot product is usually used for that purpose.
 
 This similarity computation "assigns more weight" to any previous token $K$ that has a closer relationship with $Q$, allows the model to focus on more relevant information.
 ```python
