@@ -84,10 +84,10 @@ In this case, it projects $x$ onto the embedding space.
 The `softmax()` function computes $\tt{softmax}(x_i) = \frac{e^{x_i}}{\sum^n_{j=1}e^{x_j}}$. It projects points on the real number axis $x_i$ onto the function $y_i = e^{x_i}$. Then it considers the sum of all $y$ values to be 1. Now we have a non-zero probability score.
 
 Another interesting fact about the softmax function is: if we multiply every $x$ with a factor, the relationship between $y$ will change. When this factor is less than 1, we will see the probability distribution moving towards a uniform distribution. This is the **temperature** parameter. The lower the temperature, the more "random" the results are.
-
-### Multihead Attention
 #### What's wrong with self attention?
 It only has one QKV set. The model only learns one set of weight matrix, limiting its ability to capture more features of the data.
+### Multihead Attention
+Proposed in the **Attention is All You Need** paper in 2017 with the transformers achitecture.
 ```python
 class MultiheadAttention(nn.Module):
     def __init__(self, embedding_size, num_heads):
@@ -137,3 +137,54 @@ class MultiheadAttention(nn.Module):
         return output
 ``` 
 Note that besides the split and join of multiple attention heads, in the final layer we project attention output into embedding space. 
+#### What's wrong with MHA?
+MHA is great in terms of quality, the problem is computation cost. In MHA we repeat the attention calculation `num_heads` times, and that starts to become a problem when the model size get bigger. In order to compute `attention_outputs`, we need to load the QKV matricies into memory many times. and data transferring also becomes a bottleneck.
+
+So we reduce amount of heads.
+
+![Diagram of MHA, MQA, and GQA](MHA-MQA-GQA.png)
+### Multi Query Attention
+Here we keep only one K and V, and we split Q into `num_heads`. 
+```python
+class MultiQueryAttention(nn.Module):
+    def __init__(self, embedding_size, num_query_heads):
+        super().__init__()
+        assert embedding_size % num_query_heads == 0, "Embedding size must be divisible by num_query_heads"
+        
+        self.embedding_size = embedding_size
+        self.num_query_heads = num_query_heads
+        self.head_dim = embedding_size // num_query_heads
+        
+        # Separate query projection for multiple heads
+        self.query = nn.Linear(embedding_size, embedding_size)
+        # Shared key and value projection (single head)
+        self.key = nn.Linear(embedding_size, self.head_dim)
+        self.value = nn.Linear(embedding_size, self.head_dim)
+        
+        self.out = nn.Linear(embedding_size, embedding_size)
+        
+    def forward(self, x):
+        batch_size, sequence_length, embedding_size = x.shape
+        
+        Q = self.query(x)  # (batch_size, sequence_length, embedding_size)
+        K = self.key(x)    # (batch_size, sequence_length, head_dim)
+        V = self.value(x)  # (batch_size, sequence_length, head_dim)
+        
+        # Reshape queries to multiple heads
+        Q = Q.view(batch_size, sequence_length, self.num_query_heads, self.head_dim).transpose(1, 2)
+        # Keys and values are shared across all heads, so they have a single head dimension
+        K = K.unsqueeze(1).expand(-1, self.num_query_heads, -1, -1)
+        V = V.unsqueeze(1).expand(-1, self.num_query_heads, -1, -1)  
+        # K.unsqueeze(1) = (batch_size, 1, sequence_length, head_dim)
+        # K.expand = (batch_size, num_query_heads, sequence_length, head_dim)
+        
+        scores = torch.matmul(Q, K.transpose(-2, -1)) / self.head_dim ** 0.5
+        # Q @ K.T = (batch_size, num_query_heads, sequence_length, sequence_length)
+        attention_weights = nn.functional.softmax(scores, dim=-1)
+        attention_outputs = torch.matmul(attention_weights, V)
+        
+        combined_heads = attention_outputs.transpose(1, 2).contiguous().view(batch_size, sequence_length, embedding_size)
+        output = self.out(combined_heads)
+        return output
+```
+
