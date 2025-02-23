@@ -8,7 +8,7 @@ tags:
 categories:
     - study notes
 ---
-
+the CLIP/SigLip model family has 3 parameters. VIT-Patch-Res. VIT is the vision transformer architecture and size. Patch is when they split the input image into smaller grids, what is the size of those smaller images, 16 means 16x16, 14 means 14x14. Res is the input image resolution. The higher the more accurate but bigger(slower).
 ### Prereq: install git-lfs
 https://github.com/git-lfs/git-lfs/blob/main/INSTALLING.md
 
