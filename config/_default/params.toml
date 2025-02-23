@@ -2,7 +2,7 @@
 mainSections = ["post"]
 # Output page's full content in RSS.
 rssFullContent = true
-favicon = "/favicon.png"
+favicon = "/favicon-32x32.png"
 
 [footer]
 since = 2025
@@ -19,7 +19,7 @@ subtitle = "慎终如始，则无败事。"
 [sidebar.avatar]
 enabled = true
 local = true
-src = "img/avatar.png"
+src = "img/self.png"
 
 [article]
 headingAnchor = false
@@ -55,9 +55,9 @@ limit = 10
 [[widgets.page]]
 type = "toc"
 
-[opengraph.twitter]
-site = ""
-card = "summary_large_image"
+# [opengraph.twitter]
+# site = ""
+# card = "summary_large_image"
 
 [defaultImage.opengraph]
 enabled = false
@@ -79,12 +79,12 @@ enabled = true
 enabled = false
 provider = "disqus"
 
-[comments.disqusjs]
-shortname = ""
-apiUrl = ""
-apiKey = ""
-admin = ""
-adminLabel = ""
+# [comments.disqusjs]
+# shortname = ""
+# apiUrl = ""
+# apiKey = ""
+# admin = ""
+# adminLabel = ""
 
 [comments.utterances]
 repo = ""
