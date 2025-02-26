@@ -2,7 +2,7 @@
 title: Overview of NLP(LLM)
 description: Diving deeper into NLP(LLM) basics, from encoder to RLHF.
 math: true
-date: 2025-02-23
+date: 2025-02-25
 tags: 
     - Deep Learning
     - LLM
@@ -25,16 +25,27 @@ However they both fail to achieve the second standard.
 - One-hot encoding cannot represent the relationship between tokens with relative distance at all. Token vectors are all perpendicular to each other, and the dot product is always 0. However, it makes addition simple, we can have combination of any vectors.
 ### Latent space and embedding
 We need some intermediate space, uses advantages from both tokenizer that captures relationship but is too dense, and one-hot encoding that allows easy combination(addition) of vectors but is too sparse. We can either add more dimensions to the one-dimensional tokenizer, or reduce dimensions from one-hot encoded space. Embedding is the process of reducing dimensionality from one-hot encoding by neural networks to a lower dimensional latent space.
+### Tokenizer - Splitting text corpuses into language primitives
+#### BPE (Byte-Pair Encoding)
+A very detailed step by step explanation can be found here: https://huggingface.co/learn/nlp-course/en/chapter6/5
+
+Split text corpuses into primitives, such as individual characters(ascii, unicode), then iteratively merge the most frequent combination of the current primitives into a new token. We merge until we have got a satisfactory vocabulary size. 
+##### BBPE 
+Ascii and unicode have problems with representing unknown chars, such as Chinese, emoji. BBPE splits corpuses into bytes, having better representation and support for mulitlingual and special characters.
+
 ### How do we poject token into embedding?
 We need to find a relationship to properly embed tokens as vectors.
 #### Word2Vec
 In 2013, Google proposed Word2Vec model, the first low-dimension word embedding, introducing two breakthroughs: Continuous Bag of Words(CBOW) and skip-gram. 
 - CBOW: collects words that appear before and after a target word in a sequence. For example, "The cat sits on the mat." and the target word is "sits", the model learns by trying to predict "sits" from ["The", "cat", "on", "the"]. The model learns a weight to transform words into embeddings that has the max probability to predict the right word.
 - Skip-grams: the opposite, predicts n context words based on a given target word.
-
-Problems with Word2Vec:
+##### What it does:
+- King - man + women $\approx$ queen. Vector carries semantic meanings and can be "calculated".
+- Cosine similarity can actually find similarity between semantically close vectors.
+##### Problems with Word2Vec:
 - It only considers one meaning of each word. (i.e. bank)
 - Most importantly, it does not consider long range context information.
+
 ### LSTM
 Better aptures long range context, but still has a lot of issues:
 - LSTM process word one by one, this cannot be parallelized, making training slow.
