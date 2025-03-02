@@ -6,6 +6,8 @@ tags:
     - llm
     - flet
     - app
+categories:
+    - misc
 ---
 
 # Building a Chatbot with Flet

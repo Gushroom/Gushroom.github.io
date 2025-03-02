@@ -1,6 +1,6 @@
 ---
-title: A Little Bit on MLP and DNN in General
-description: Basic understandings of DL primitives
+title: A Little Bit on Deep Learning in General
+description: Basics of DL(Activation, Loss, Optimizers)
 date: 2025-02-25
 math: true
 tags: 

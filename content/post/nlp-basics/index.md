@@ -158,13 +158,13 @@ So we reduce amount of heads.
 Here we keep only one K and V, and we split Q into `num_heads`. 
 ```python
 class MultiQueryAttention(nn.Module):
-    def __init__(self, embedding_size, num_query_heads):
+    def __init__(self, embedding_size, num_heads):
         super().__init__()
-        assert embedding_size % num_query_heads == 0, "Embedding size must be divisible by num_query_heads"
+        assert embedding_size % num_heads == 0, "Embedding size must be divisible by num_heads"
         
         self.embedding_size = embedding_size
-        self.num_query_heads = num_query_heads
-        self.head_dim = embedding_size // num_query_heads
+        self.num_heads = num_heads
+        self.head_dim = embedding_size // num_heads
         
         # Separate query projection for multiple heads
         self.query = nn.Linear(embedding_size, embedding_size)
@@ -182,20 +182,65 @@ class MultiQueryAttention(nn.Module):
         V = self.value(x)  # (batch_size, sequence_length, head_dim)
         
         # Reshape queries to multiple heads
-        Q = Q.view(batch_size, sequence_length, self.num_query_heads, self.head_dim).transpose(1, 2)
+        Q = Q.view(batch_size, sequence_length, self.num_heads, self.head_dim).transpose(1, 2)
         # Keys and values are shared across all heads, so they have a single head dimension
-        K = K.unsqueeze(1).expand(-1, self.num_query_heads, -1, -1)
-        V = V.unsqueeze(1).expand(-1, self.num_query_heads, -1, -1)  
+        K = K.unsqueeze(1).expand(-1, self.num_heads, -1, -1)
+        V = V.unsqueeze(1).expand(-1, self.num_heads, -1, -1)  
         # K.unsqueeze(1) = (batch_size, 1, sequence_length, head_dim)
-        # K.expand = (batch_size, num_query_heads, sequence_length, head_dim)
+        # K.expand = (batch_size, num_heads, sequence_length, head_dim)
         
         scores = torch.matmul(Q, K.transpose(-2, -1)) / self.head_dim ** 0.5
-        # Q @ K.T = (batch_size, num_query_heads, sequence_length, sequence_length)
+        # Q @ K.T = (batch_size, num_heads, sequence_length, sequence_length)
         attention_weights = nn.functional.softmax(scores, dim=-1)
         attention_outputs = torch.matmul(attention_weights, V)
         
         combined_heads = attention_outputs.transpose(1, 2).contiguous().view(batch_size, sequence_length, embedding_size)
         output = self.out(combined_heads)
         return output
+```
+### Group Query Attention
+Between MLA and MQA, uses G(1 << G << num_heads) Groups of KV pair, and still num_heads amount of Q matrices.
+
+When G = 1, GQA = MQA, when G = num_heads, GQA = MHA.
+```python
+class GroupQueryAttention(nn.Module):
+    def __init__(self, embedding_size, num_heads, num_groups):
+        super().__init__()
+        assert embedding_size % num_heads == 0, "embedding_size must be divisible by num_heads!"
+        assert embedding_size % num_groups == 0, "embedding_size must be divisible by num_groups!"
+        assert num_heads % num_groups == 0, "num_heads must be divisible by num_groups!"
+        self.embedding_size = embedding_size
+        self.num_heads = num_heads
+        self.num_groups = num_groups
+        self.head_dim = embedding_size // num_heads 
+        self.heads_per_group = num_heads // num_groups
+
+        self.query = nn.Linear(embedding_size, embedding_size)
+        self.key = nn.Linear(embedding_size, embedding_size // self.heads_per_group) 
+        self.value = nn.Linear(embedding_size, embedding_size // self.heads_per_group)
+
+        self.out = nn.Linear(embedding_size, embedding_size)
+
+    
+    def forward(self, x):
+
+        batch_size, sequence_length, embedding_size = x.shape
+
+        Q = self.query(x) # (batch_size, sequence_length, embedding_size)
+        K = self.key(x) # (batch_size, sequence_length, embedding_size // heads_per_group)
+        V = self.value(x) # (batch_size, sequence_length, embedding_size // heads_per_group)
+
+        Q = Q.view(batch_size, sequence_length, self.num_heads, self.head_dim).transpose(1, 2)
+        K = K.view(batch_size, sequence_length, self.num_groups, -1).transpose(1, 2)
+        V = V.view(batch_size, sequence_length, self.num_groups, -1).transpose(1, 2)
+        # (batch_size, num_groups, sequence_length, head_dim)
+
+        K = K.unsqueeze(2).expand(-1, -1, self.heads_per_group, -1, -1)
+        V = V.unsqueeze(2).expand(-1, -1, self.heads_per_group, -1, -1)
+        # expand heads_per_group into the third dimension
+        # (batch_size, num_groups, heads_per_group, sequence_length, head_dim)
+
+        K = K.contiguous().view(batch_size, self.num_heads, sequence_length, self.head_dim)
+
 ```
 

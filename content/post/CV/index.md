@@ -30,5 +30,7 @@ WIP
         - patch(224 = 14px * 14px * (4x4)grid)
             1. Flattern pixels in the patch
             2. Linear projection of flatterned patches
+            3. Add a learnable position encoder, attach to image token vectors
+            
 
 
