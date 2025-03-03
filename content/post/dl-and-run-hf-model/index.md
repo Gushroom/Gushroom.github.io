@@ -1,7 +1,7 @@
 ---
 title: Download and run VLM model from HuggingFace
 description: Some useful notes to save myself some search time
-date: 2025-02-22
+date: 2025-03-02
 tags: 
     - Deep Learning
     - HuggingFace
@@ -33,7 +33,6 @@ with torch.no_grad():
 ### Running Qwen-VL2.5
 ```python
 model = Qwen2_5_VLForConditionalGeneration.from_pretrained(ckpt, torch_dtype="auto", device_map="auto")
-tokenizer = AutoTokenizer.from_pretrained(ckpt)
 processor = AutoProcessor.from_pretrained(ckpt)
 ```
 What's not mentioned in the documentation, `PIL.Image` is also accepted as image input
