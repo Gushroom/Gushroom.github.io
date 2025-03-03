@@ -94,6 +94,9 @@ def calculate_loss(stepwise_returns, log_prob_actions):
 这里的loss function就是最基本的policy gradient, REINFORCE
 
 $$ \tt{Loss} = -\sum_t (\tt{Return}_t \times \log \pi (a_t | s_t))$$
+
+$\log \pi (a_t | s_t)$ 是策略网络输出的动作对数概率（`log_prob_actions`）
+
 并反向传播更新权重
 ```python
 def update_policy(stepwise_returns, log_prob_actions, optimizer):
