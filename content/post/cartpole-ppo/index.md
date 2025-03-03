@@ -20,6 +20,7 @@ At every step, the agent takes an action based on the policy. If the action spac
 - 标准差（$\theta$）：控制探索的随机性（$\theta$ 越大，动作的随机性越强）。
 
 Policy 既然是一个映射（函数），那我们就可以用神经网络来拟合
+
 CartPole的环境比较简单，用一个小MLP就可以了
 
 ```python
