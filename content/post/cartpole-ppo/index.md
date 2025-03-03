@@ -45,9 +45,13 @@ class PolicyNetwork(nn.Module):
         return x
 ```
 每一步计算长期return
+
 Return是从这一步加后续所有奖励折扣之和
+
 discount_factor一般小于1，越远的回报权重越小
+
 在最前面插入，确保顺序是`[R0, R1, R2...]`
+
 ```python
 def calculate_stepwise_returns(rewards, discount_factor):
     returns = []
