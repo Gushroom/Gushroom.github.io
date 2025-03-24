@@ -60,34 +60,23 @@ An interesting observation is $\mathbf{QK}^T$ is matrix multiplication, but it i
 This similarity computation "assigns more weight" to any previous token $K$ that has a closer relationship with $Q$, allows the model to focus on more relevant information.
 ```python
 class SelfAttention(nn.Module):
-    def __init__(self, embedding_size):
-        super().__init__()
-        self.embedding_size = embedding_size
-        self.query = nn.Linear(embedding_size, embedding_size)
-        self.key = nn.Linear(embedding_size, embedding_size)
-        self.value = nn.Linear(embedding_size, embedding_size)
-
-    def forward(self, x):
-        # Transform input X into embedding space
-        # X shape: (batch_size, sequence_length, embedding_size)
-        Q = self.query(x) # shape: (batch_size, sequence_length, embedding_size)
-        K = self.key(x)
-        V = self.value(x)
-
-        d_k = self.embedding_size
-
-        score = torch.matmul(Q, K.transpose(-2, -1)) # this is the Query-wise similarity score
-        # We transpose K here because Q and K have shape = (B, S, E), and K.transpose(-2, -1) gives us (B, E, S)
-        # Q @ K.T then gives us (S, S) for each batch, which is the similarity between each QK-pair
-
-        normalized_score = score / torch.sqrt(d_k)
-        # score grows as d increases, because it is computed as sum of products
-        # Dividing by d_k is too big, shrinking the magnitude too much.
-
-        attention_weights = nn.functional.softmax(normalized_score, dim = -1)
-
-        output = torch.matmul(attention_weights, V)
-        return output
+  def __init__(self, dim_in, dim_out, qkv_bias = False):
+    super().__init__()
+    self.query = nn.Linear(dim_in, dim_out, bias=qkv_bias)
+    self.key   = nn.Linear(dim_in, dim_out, bias=qkv_bias)
+    self.value = nn.Linear(dim_in, dim_out, bias=qkv_bias)
+    
+  def forward(self, x):
+    Q = self.query(x)
+    K = self.key(x)
+    print(K.shape)
+    V = self.value(x)
+    attn_scores = Q @ K.T
+    attn_weights = torch.softmax(
+        attn_scores / K.shape[-1] ** 0.5, dim=-1
+    )
+    context_vec = attn_weights @ V
+    return context_vec
 ```
 A `Linear()` layer computes $y = xW^T + b$, it tranforms input vector $x$ into another space by weight matrix $W$ and bias $b$. 
 In this case, it projects $x$ onto the embedding space.
