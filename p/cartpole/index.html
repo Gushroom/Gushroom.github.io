@@ -1,0 +1,262 @@
+<!doctype html><html lang=en dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="Getting started with RL"><title>Cartpole</title>
+<link rel=canonical href=https://gushroom.github.io/p/cartpole/><link rel=stylesheet href=/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css><meta property='og:title' content="Cartpole"><meta property='og:description' content="Getting started with RL"><meta property='og:url' content='https://gushroom.github.io/p/cartpole/'><meta property='og:site_name' content="Gushroom's notebook"><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='Deep Learning'><meta property='article:tag' content='Reinforcement Learning'><meta property='article:published_time' content='2025-03-02T00:00:00+00:00'><meta property='article:modified_time' content='2025-03-02T00:00:00+00:00'><meta name=twitter:title content="Cartpole"><meta name=twitter:description content="Getting started with RL"><link rel="shortcut icon" href=/favicon-32x32.png></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label="Toggle Menu">
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/self_hu_96cb9cc58f14df2b.png width=300 height=300 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>🍄</span></figure><div class=site-meta><h1 class=site-name><a href=/>Gushroom's notebook</a></h1><h2 class=site-description>慎终如始，则无败事。</h2></div></header><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li><a href=/links/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>Links</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>Dark Mode</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">Table of contents</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#policy-gradient>Policy Gradient</a></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><header class=article-category><a href=/categories/study-notes/ style=background-color:#90ee90;color:#fff>Study Notes</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/cartpole/>Cartpole</a></h2><h3 class=article-subtitle>Getting started with RL</h3></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Mar 02, 2025</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>3 minute read</time></div></footer></div></header><section class=article-content><h2 id=policy-gradient>Policy Gradient</h2><p>强化学习的核心之一就是<strong>学以致用</strong>。一边在探索环境中学习，一边用学到的action来获取reward。Policy是环境到行为的映射，policy(state) = action, 同理还有state(action) = reward。</p><p>At every step, the agent takes an action based on the policy. If the action space is discrete, the policy should return a softmax probability of each action, and if the action space is continuous, the policy outputs the mean and standard deviation of the Gaussian probability distribution for each continuous action.</p><p>为什么连续的空间要输出高斯分布呢？</p><ul><li>均值（$\mu$）：代表智能体认为在当前状态下最优的动作值。</li><li>标准差（$\theta$）：控制探索的随机性（$\theta$ 越大，动作的随机性越强）。</li></ul><p>Policy 既然是一个映射（函数），那我们就可以用神经网络来拟合</p><p>CartPole的环境比较简单，用一个小MLP就可以了</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>import</span> <span class=nn>torch</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>torch.nn</span> <span class=k>as</span> <span class=nn>nn</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>torch.nn.functional</span> <span class=k>as</span> <span class=nn>F</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>torch</span> <span class=kn>import</span> <span class=n>distributions</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>class</span> <span class=nc>PolicyNetwork</span><span class=p>(</span><span class=n>nn</span><span class=o>.</span><span class=n>Module</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=fm>__init__</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>input_dim</span><span class=p>,</span> <span class=n>hidden_dim</span><span class=p>,</span> <span class=n>output_dim</span><span class=p>,</span> <span class=n>dropout</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=nb>super</span><span class=p>()</span><span class=o>.</span><span class=fm>__init__</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>        <span class=bp>self</span><span class=o>.</span><span class=n>layer1</span> <span class=o>=</span> <span class=n>nn</span><span class=o>.</span><span class=n>Linear</span><span class=p>(</span><span class=n>input_dim</span><span class=p>,</span> <span class=n>hidden_dim</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=bp>self</span><span class=o>.</span><span class=n>layer2</span> <span class=o>=</span> <span class=n>nn</span><span class=o>.</span><span class=n>Linear</span><span class=p>(</span><span class=n>hidden_dim</span><span class=p>,</span> <span class=n>output_dim</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=bp>self</span><span class=o>.</span><span class=n>dropout</span> <span class=o>=</span> <span class=n>nn</span><span class=o>.</span><span class=n>Dropout</span><span class=p>(</span><span class=n>dropout</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=bp>self</span><span class=o>.</span><span class=n>relu</span> <span class=o>=</span> <span class=n>nn</span><span class=o>.</span><span class=n>ReLU</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>        
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>forward</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>x</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=n>x</span> <span class=o>=</span> <span class=bp>self</span><span class=o>.</span><span class=n>layer1</span><span class=p>(</span><span class=n>x</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>x</span> <span class=o>=</span> <span class=bp>self</span><span class=o>.</span><span class=n>dropout</span><span class=p>(</span><span class=n>x</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>x</span> <span class=o>=</span> <span class=bp>self</span><span class=o>.</span><span class=n>relu</span><span class=p>(</span><span class=n>x</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>x</span> <span class=o>=</span> <span class=bp>self</span><span class=o>.</span><span class=n>layer2</span><span class=p>(</span><span class=n>x</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=n>x</span>
+</span></span></code></pre></td></tr></table></div></div><p>每一步计算长期return</p><p>Return是从这一步加后续所有奖励折扣之和</p><p>discount_factor一般小于1，越远的回报权重越小</p><p>在最前面插入，确保顺序是<code>[R0, R1, R2...]</code></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>calculate_stepwise_returns</span><span class=p>(</span><span class=n>rewards</span><span class=p>,</span> <span class=n>discount_factor</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=n>returns</span> <span class=o>=</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl>    <span class=n>R</span> <span class=o>=</span> <span class=mi>0</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>r</span> <span class=ow>in</span> <span class=nb>reversed</span><span class=p>(</span><span class=n>rewards</span><span class=p>):</span> <span class=c1># 先</span>
+</span></span><span class=line><span class=cl>        <span class=n>R</span> <span class=o>=</span> <span class=n>r</span> <span class=o>+</span> <span class=n>R</span> <span class=o>*</span> <span class=n>discount_factor</span>
+</span></span><span class=line><span class=cl>        <span class=n>returns</span><span class=o>.</span><span class=n>insert</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=n>R</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>returns</span> <span class=o>=</span> <span class=n>torch</span><span class=o>.</span><span class=n>tensor</span><span class=p>(</span><span class=n>returns</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>normalized_returns</span> <span class=o>=</span> <span class=p>(</span><span class=n>returns</span> <span class=o>-</span> <span class=n>returns</span><span class=o>.</span><span class=n>mean</span><span class=p>())</span> <span class=o>/</span> <span class=n>returns</span><span class=o>.</span><span class=n>std</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>normalized_returns</span>
+</span></span></code></pre></td></tr></table></div></div><p>为什么要Normalize?</p><ul><li>减小方差</li><li>加速收敛</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>forward_pass</span><span class=p>(</span><span class=n>env</span><span class=p>,</span> <span class=n>policy</span><span class=p>,</span> <span class=n>discount_factor</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=n>log_prob_actions</span> <span class=o>=</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl>    <span class=n>rewards</span> <span class=o>=</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl>    <span class=n>done</span> <span class=o>=</span> <span class=kc>False</span>
+</span></span><span class=line><span class=cl>    <span class=n>episode_return</span> <span class=o>=</span> <span class=mi>0</span>
+</span></span><span class=line><span class=cl>    <span class=n>policy</span><span class=o>.</span><span class=n>train</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=n>observation</span><span class=p>,</span> <span class=n>info</span> <span class=o>=</span> <span class=n>env</span><span class=o>.</span><span class=n>reset</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=k>while</span> <span class=ow>not</span> <span class=n>done</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>observation</span> <span class=o>=</span> <span class=n>torch</span><span class=o>.</span><span class=n>FloatTensor</span><span class=p>(</span><span class=n>observation</span><span class=p>)</span><span class=o>.</span><span class=n>unsqueeze</span><span class=p>(</span><span class=mi>0</span><span class=p>)</span> <span class=c1># state</span>
+</span></span><span class=line><span class=cl>        <span class=n>action_pred</span> <span class=o>=</span> <span class=n>policy</span><span class=p>(</span><span class=n>observation</span><span class=p>)</span> <span class=c1># action = policy(state)</span>
+</span></span><span class=line><span class=cl>        <span class=n>action_prob</span> <span class=o>=</span> <span class=n>F</span><span class=o>.</span><span class=n>softmax</span><span class=p>(</span><span class=n>action_pred</span><span class=p>,</span> <span class=n>dim</span> <span class=o>=</span> <span class=o>-</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>dist</span> <span class=o>=</span> <span class=n>distributions</span><span class=o>.</span><span class=n>Categorical</span><span class=p>(</span><span class=n>action_prob</span><span class=p>)</span> <span class=c1># discretize</span>
+</span></span><span class=line><span class=cl>        <span class=n>action</span> <span class=o>=</span> <span class=n>dist</span><span class=o>.</span><span class=n>sample</span><span class=p>()</span> 
+</span></span><span class=line><span class=cl>        <span class=n>log_prob_action</span> <span class=o>=</span> <span class=n>dist</span><span class=o>.</span><span class=n>log_prob</span><span class=p>(</span><span class=n>action</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>observation</span><span class=p>,</span> <span class=n>reward</span><span class=p>,</span> <span class=n>terminated</span><span class=p>,</span> <span class=n>truncated</span><span class=p>,</span> <span class=n>info</span> <span class=o>=</span> <span class=n>env</span><span class=o>.</span><span class=n>step</span><span class=p>(</span><span class=n>action</span><span class=o>.</span><span class=n>item</span><span class=p>())</span> <span class=c1># reward = state(action)</span>
+</span></span><span class=line><span class=cl>        <span class=n>done</span> <span class=o>=</span> <span class=n>terminated</span> <span class=ow>or</span> <span class=n>truncated</span>
+</span></span><span class=line><span class=cl>        <span class=n>log_prob_actions</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=n>log_prob_action</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>rewards</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=n>reward</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>episode_return</span> <span class=o>+=</span> <span class=n>reward</span>
+</span></span><span class=line><span class=cl>    <span class=n>log_prob_actions</span> <span class=o>=</span> <span class=n>torch</span><span class=o>.</span><span class=n>cat</span><span class=p>(</span><span class=n>log_prob_actions</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>stepwise_returns</span> <span class=o>=</span> <span class=n>calculate_stepwise_returns</span><span class=p>(</span><span class=n>rewards</span><span class=p>,</span> <span class=n>discount_factor</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>episode_return</span><span class=p>,</span> <span class=n>stepwise_returns</span><span class=p>,</span> <span class=n>log_prob_actions</span>
+</span></span></code></pre></td></tr></table></div></div><p>计算loss</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>calculate_loss</span><span class=p>(</span><span class=n>stepwise_returns</span><span class=p>,</span> <span class=n>log_prob_actions</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=n>loss</span> <span class=o>=</span> <span class=o>-</span><span class=p>(</span><span class=n>stepwise_returns</span> <span class=o>*</span> <span class=n>log_prob_actions</span><span class=p>)</span><span class=o>.</span><span class=n>sum</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>loss</span>
+</span></span></code></pre></td></tr></table></div></div><p>这里的loss function就是最基本的policy gradient, REINFORCE</p>$$ \tt{Loss} = -\sum_t (\tt{Return}_t \times \log \pi (a_t | s_t))$$<p>$\log \pi (a_t | s_t)$ 是策略网络输出的动作对数概率（<code>log_prob_actions</code>）</p><p>并反向传播更新权重</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>update_policy</span><span class=p>(</span><span class=n>stepwise_returns</span><span class=p>,</span> <span class=n>log_prob_actions</span><span class=p>,</span> <span class=n>optimizer</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=n>stepwise_returns</span> <span class=o>=</span> <span class=n>stepwise_returns</span><span class=o>.</span><span class=n>detach</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=n>loss</span> <span class=o>=</span> <span class=n>calculate_loss</span><span class=p>(</span><span class=n>stepwise_returns</span><span class=p>,</span> <span class=n>log_prob_actions</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=n>optimizer</span><span class=o>.</span><span class=n>zero_grad</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=n>loss</span><span class=o>.</span><span class=n>backward</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=n>optimizer</span><span class=o>.</span><span class=n>step</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>loss</span><span class=o>.</span><span class=n>item</span><span class=p>()</span>
+</span></span></code></pre></td></tr></table></div></div><p>训练并保存权重</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>import</span> <span class=nn>gymnasium</span> <span class=k>as</span> <span class=nn>gym</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>torch</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>numpy</span> <span class=k>as</span> <span class=nn>np</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>torch</span> <span class=kn>import</span> <span class=n>optim</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>env</span> <span class=o>=</span> <span class=n>gym</span><span class=o>.</span><span class=n>make</span><span class=p>(</span><span class=s2>&#34;CartPole-v1&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>seed</span> <span class=o>=</span> <span class=mi>66</span>
+</span></span><span class=line><span class=cl><span class=n>np</span><span class=o>.</span><span class=n>random</span><span class=o>.</span><span class=n>seed</span><span class=p>(</span><span class=n>seed</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>torch</span><span class=o>.</span><span class=n>manual_seed</span><span class=p>(</span><span class=n>seed</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>env</span><span class=o>.</span><span class=n>reset</span><span class=p>(</span><span class=n>seed</span><span class=o>=</span><span class=n>seed</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>main</span><span class=p>():</span> 
+</span></span><span class=line><span class=cl>    <span class=n>MAX_EPOCHS</span> <span class=o>=</span> <span class=mi>500</span>
+</span></span><span class=line><span class=cl>    <span class=n>DISCOUNT_FACTOR</span> <span class=o>=</span> <span class=mf>0.99</span>
+</span></span><span class=line><span class=cl>    <span class=n>N_TRIALS</span> <span class=o>=</span> <span class=mi>25</span>
+</span></span><span class=line><span class=cl>    <span class=n>REWARD_THRESHOLD</span> <span class=o>=</span> <span class=mi>475</span>
+</span></span><span class=line><span class=cl>    <span class=n>PRINT_INTERVAL</span> <span class=o>=</span> <span class=mi>10</span>
+</span></span><span class=line><span class=cl>    <span class=n>INPUT_DIM</span> <span class=o>=</span> <span class=n>env</span><span class=o>.</span><span class=n>observation_space</span><span class=o>.</span><span class=n>shape</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>    <span class=n>HIDDEN_DIM</span> <span class=o>=</span> <span class=mi>128</span>
+</span></span><span class=line><span class=cl>    <span class=n>OUTPUT_DIM</span> <span class=o>=</span> <span class=n>env</span><span class=o>.</span><span class=n>action_space</span><span class=o>.</span><span class=n>n</span>
+</span></span><span class=line><span class=cl>    <span class=n>DROPOUT</span> <span class=o>=</span> <span class=mf>0.5</span>
+</span></span><span class=line><span class=cl>    <span class=n>episode_returns</span> <span class=o>=</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl>    <span class=n>policy</span> <span class=o>=</span> <span class=n>PolicyNetwork</span><span class=p>(</span><span class=n>INPUT_DIM</span><span class=p>,</span> <span class=n>HIDDEN_DIM</span><span class=p>,</span> <span class=n>OUTPUT_DIM</span><span class=p>,</span> <span class=n>DROPOUT</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>LEARNING_RATE</span> <span class=o>=</span> <span class=mf>0.01</span>
+</span></span><span class=line><span class=cl>    <span class=n>optimizer</span> <span class=o>=</span> <span class=n>optim</span><span class=o>.</span><span class=n>Adam</span><span class=p>(</span><span class=n>policy</span><span class=o>.</span><span class=n>parameters</span><span class=p>(),</span> <span class=n>lr</span> <span class=o>=</span> <span class=n>LEARNING_RATE</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>episode</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=mi>1</span><span class=p>,</span> <span class=n>MAX_EPOCHS</span><span class=o>+</span><span class=mi>1</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=n>episode_return</span><span class=p>,</span> <span class=n>stepwise_returns</span><span class=p>,</span> <span class=n>log_prob_actions</span> <span class=o>=</span> <span class=n>forward_pass</span><span class=p>(</span><span class=n>env</span><span class=p>,</span> <span class=n>policy</span><span class=p>,</span> <span class=n>DISCOUNT_FACTOR</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>_</span> <span class=o>=</span> <span class=n>update_policy</span><span class=p>(</span><span class=n>stepwise_returns</span><span class=p>,</span> <span class=n>log_prob_actions</span><span class=p>,</span> <span class=n>optimizer</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>episode_returns</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=n>episode_return</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>mean_episode_return</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>mean</span><span class=p>(</span><span class=n>episode_returns</span><span class=p>[</span><span class=o>-</span><span class=n>N_TRIALS</span><span class=p>:])</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=n>episode</span> <span class=o>%</span> <span class=n>PRINT_INTERVAL</span> <span class=o>==</span> <span class=mi>0</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=nb>print</span><span class=p>(</span><span class=sa>f</span><span class=s1>&#39;| Episode: </span><span class=si>{</span><span class=n>episode</span><span class=si>:</span><span class=s1>3</span><span class=si>}</span><span class=s1> | Mean Rewards: </span><span class=si>{</span><span class=n>mean_episode_return</span><span class=si>:</span><span class=s1>5.1f</span><span class=si>}</span><span class=s1> |&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=n>mean_episode_return</span> <span class=o>&gt;=</span> <span class=n>REWARD_THRESHOLD</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=nb>print</span><span class=p>(</span><span class=sa>f</span><span class=s1>&#39;Reached reward threshold in </span><span class=si>{</span><span class=n>episode</span><span class=si>}</span><span class=s1> episodes&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=n>torch</span><span class=o>.</span><span class=n>save</span><span class=p>(</span><span class=n>policy</span><span class=p>,</span> <span class=s1>&#39;pg.pt&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=k>break</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=vm>__name__</span> <span class=o>==</span> <span class=s2>&#34;__main__&#34;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=n>main</span><span class=p>()</span>
+</span></span></code></pre></td></tr></table></div></div><p>Load model and let it play</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>import</span> <span class=nn>gymnasium</span> <span class=k>as</span> <span class=nn>gym</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>torch</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>env</span> <span class=o>=</span> <span class=n>gym</span><span class=o>.</span><span class=n>make</span><span class=p>(</span><span class=s2>&#34;CartPole-v1&#34;</span><span class=p>,</span> <span class=n>render_mode</span><span class=o>=</span><span class=s2>&#34;human&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>observation</span><span class=p>,</span> <span class=n>info</span> <span class=o>=</span> <span class=n>env</span><span class=o>.</span><span class=n>reset</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=n>policy</span> <span class=o>=</span> <span class=n>torch</span><span class=o>.</span><span class=n>load</span><span class=p>(</span><span class=s2>&#34;ppo.pt&#34;</span><span class=p>,</span> <span class=n>weights_only</span><span class=o>=</span><span class=kc>False</span><span class=p>)</span><span class=o>.</span><span class=n>eval</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>episode_over</span> <span class=o>=</span> <span class=kc>False</span>
+</span></span><span class=line><span class=cl><span class=k>while</span> <span class=ow>not</span> <span class=n>episode_over</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=n>obs_tensor</span> <span class=o>=</span> <span class=n>torch</span><span class=o>.</span><span class=n>tensor</span><span class=p>(</span><span class=n>observation</span><span class=p>,</span> <span class=n>dtype</span><span class=o>=</span><span class=n>torch</span><span class=o>.</span><span class=n>float32</span><span class=p>)</span><span class=o>.</span><span class=n>unsqueeze</span><span class=p>(</span><span class=mi>0</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1># Get action from policy</span>
+</span></span><span class=line><span class=cl>    <span class=k>with</span> <span class=n>torch</span><span class=o>.</span><span class=n>no_grad</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>        <span class=n>action_logits</span> <span class=o>=</span> <span class=n>policy</span><span class=p>(</span><span class=n>obs_tensor</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>action</span> <span class=o>=</span> <span class=n>torch</span><span class=o>.</span><span class=n>argmax</span><span class=p>(</span><span class=n>action_logits</span><span class=p>,</span> <span class=n>dim</span><span class=o>=</span><span class=mi>1</span><span class=p>)</span><span class=o>.</span><span class=n>item</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>        
+</span></span><span class=line><span class=cl>    <span class=n>observation</span><span class=p>,</span> <span class=n>reward</span><span class=p>,</span> <span class=n>terminated</span><span class=p>,</span> <span class=n>truncated</span><span class=p>,</span> <span class=n>info</span> <span class=o>=</span> <span class=n>env</span><span class=o>.</span><span class=n>step</span><span class=p>(</span><span class=n>action</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>episode_over</span> <span class=o>=</span> <span class=n>terminated</span> <span class=ow>or</span> <span class=n>truncated</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>env</span><span class=o>.</span><span class=n>close</span><span class=p>()</span>
+</span></span></code></pre></td></tr></table></div></div></section><footer class=article-footer><section class=article-tags><a href=/tags/deep-learning/>Deep Learning</a>
+<a href=/tags/reinforcement-learning/>Reinforcement Learning</a></section><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css integrity=sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV crossorigin=anonymous><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js integrity=sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8 crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js integrity=sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05 crossorigin=anonymous defer></script><script>window.addEventListener("DOMContentLoaded",()=>{const e=document.querySelector(".main-article");renderMathInElement(e,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1},{left:"\\[",right:"\\]",display:!0}],ignoredClasses:["gist"]})})</script></article><aside class=related-content--wrapper><h2 class=section-title>Related content</h2><div class=related-content><div class="flex article-list--tile"><article><a href=/p/download-and-run-vlm-model-from-huggingface/><div class=article-details><h2 class=article-title>Download and run VLM model from HuggingFace</h2></div></a></article><article><a href=/p/a-little-bit-on-deep-learning-in-general/><div class=article-details><h2 class=article-title>A Little Bit on Deep Learning in General</h2></div></a></article><article><a href=/p/computer-vision/><div class=article-details><h2 class=article-title>Computer Vision</h2></div></a></article><article><a href=/p/overview-of-nlpllm/><div class=article-details><h2 class=article-title>Overview of NLP(LLM)</h2></div></a></article></div></div></aside><footer class=site-footer><section class=copyright>&copy;
+2025 Gushroom's notebook</section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.30.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a></section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

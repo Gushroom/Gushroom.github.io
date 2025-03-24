@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Computer Vision on Gushroom's notebook</title><link>https://gushroom.github.io/tags/computer-vision/</link><description>Recent content in Computer Vision on Gushroom's notebook</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Tue, 25 Feb 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://gushroom.github.io/tags/computer-vision/index.xml" rel="self" type="application/rss+xml"/><item><title>Computer Vision</title><link>https://gushroom.github.io/p/computer-vision/</link><pubDate>Tue, 25 Feb 2025 00:00:00 +0000</pubDate><guid>https://gushroom.github.io/p/computer-vision/</guid><description>&lt;h2 id="cnn">CNN
+&lt;/h2>&lt;h3 id="convolution">Convolution
+&lt;/h3>&lt;p>卷积 = 特征提取&lt;/p>
+&lt;ul>
+&lt;li>索伯算子 &lt;a class="link" href="https://en.wikipedia.org/wiki/Sobel_operator" target="_blank" rel="noopener"
+>https://en.wikipedia.org/wiki/Sobel_operator&lt;/a>
+&lt;ul>
+&lt;li>既是传统的图像处理，也是很好的特征提取例子
+为什么卷积的同时通道数也在增加？&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>卷积和池化都会减少dimension，增加通道数来保证不丢失太多信息量&lt;/li>
+&lt;li>&lt;code>n_channels&lt;/code>个卷积核随机初始化，对同一个feature map进行特征提取
+&lt;ul>
+&lt;li>每个通道可以学习不同的特征&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>1x1卷积核可以在不改变feature map大小的前提下改变通道数
+&lt;ul>
+&lt;li>升维/降维&lt;/li>
+&lt;li>通道间传递信息：使用1x1卷积核，实现降维和升维的操作其实就是channel间信息的线性组合变化，3x3，64channels的卷积核后面添加一个1x1，28channels的卷积核，就变成了3x3，28channels的卷积核，原来的64个channels就可以理解为跨通道线性组合变成了28channels，这就是通道间的信息交互&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="key-components-of-cnn">Key components of CNN:
+&lt;/h3>&lt;ul>
+&lt;li>Convolution: Extract feature from images, value in each cell are randomized and learned.&lt;/li>
+&lt;li>Pooling: Reduce dimensionality to prevent overfitting, reduce computational cost(reduce size of feature map).&lt;/li>
+&lt;li>Activation: Introduce Non-linearity.&lt;/li>
+&lt;li>Fully connected layers: Perform classification.&lt;/li>
+&lt;/ul>
+&lt;h3 id="size-calculation">Size calculation:
+&lt;/h3>&lt;ul>
+&lt;li>Convolution: $\tt{size} = \lfloor \frac{(\tt{width - kernelsize} + 2 \times \tt{padding})}{\tt{stride}} \rfloor + 1$&lt;/li>
+&lt;li>Pooling: $\tt{size} = \lceil \frac{size}{2} \rceil$&lt;/li>
+&lt;li>When size remains the same: kernelsize = 3 and padding = 1, kernel = 5 and padding = 2&lt;/li>
+&lt;/ul>
+&lt;h2 id="vit-vision-transformer">VIT (Vision Transformer)
+&lt;/h2>&lt;ul>
+&lt;li>Trains faster than CNN (transformer is more suitable for parallel computation)&lt;/li>
+&lt;li>Requires slightly more dataset to train (at smaller datasets lose to CNN, excels at larger datasets)&lt;/li>
+&lt;li>Attempt to apply transformer achitecture on image tasks without change
+&lt;ul>
+&lt;li>represent image features like text
+&lt;ul>
+&lt;li>patch(224 = 14px * 14px * (4x4)grid)
+&lt;ol>
+&lt;li>Flattern pixels in the patch&lt;/li>
+&lt;li>Linear projection of flatterned patches&lt;/li>
+&lt;li>Add a learnable position encoder, attach to image token vectors&lt;/li>
+&lt;/ol>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul></description></item></channel></rss>

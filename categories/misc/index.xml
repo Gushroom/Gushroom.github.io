@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Misc on Gushroom's notebook</title><link>https://gushroom.github.io/categories/misc/</link><description>Recent content in Misc on Gushroom's notebook</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Mon, 24 Mar 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://gushroom.github.io/categories/misc/index.xml" rel="self" type="application/rss+xml"/><item><title>Cuda Assertion Fail</title><link>https://gushroom.github.io/p/cuda-assertion-fail/</link><pubDate>Mon, 24 Mar 2025 00:00:00 +0000</pubDate><guid>https://gushroom.github.io/p/cuda-assertion-fail/</guid><description>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">/opt/conda/conda-bld/pytorch_1699449181202/work/aten/src/ATen/native/cuda/IndexKernel.cu:92: operator(): block: [25778,0,0], thread: [37,0,0] Assertion `-sizes[i] &amp;lt;= index &amp;amp;&amp;amp; index &amp;lt; sizes[i] &amp;amp;&amp;amp; &amp;#34;index out of bounds&amp;#34;` failed.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">/opt/conda/conda-bld/pytorch_1699449181202/work/aten/src/ATen/native/cuda/IndexKernel.cu:92: operator(): block: [25778,0,0], thread: [38,0,0] Assertion `-sizes[i] &amp;lt;= index &amp;amp;&amp;amp; index &amp;lt; sizes[i] &amp;amp;&amp;amp; &amp;#34;index out of bounds&amp;#34;` failed.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">/opt/conda/conda-bld/pytorch_1699449181202/work/aten/src/ATen/native/cuda/IndexKernel.cu:92: operator(): block: [25778,0,0], thread: [39,0,0] Assertion `-sizes[i] &amp;lt;= index &amp;amp;&amp;amp; index &amp;lt; sizes[i] &amp;amp;&amp;amp; &amp;#34;index out of bounds&amp;#34;` failed.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">/opt/conda/conda-bld/pytorch_1699449181202/work/aten/src/ATen/native/cuda/IndexKernel.cu:92: operator(): block: [25778,0,0], thread: [40,0,0] Assertion `-sizes[i] &amp;lt;= index &amp;amp;&amp;amp; index &amp;lt; sizes[i] &amp;amp;&amp;amp; &amp;#34;index out of bounds&amp;#34;` failed.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">/opt/conda/conda-bld/pytorch_1699449181202/work/aten/src/ATen/native/cuda/IndexKernel.cu:92: operator(): block: [25778,0,0], thread: [41,0,0] Assertion `-sizes[i] &amp;lt;= index &amp;amp;&amp;amp; index &amp;lt; sizes[i] &amp;amp;&amp;amp; &amp;#34;index out of bounds&amp;#34;` failed.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">/opt/conda/conda-bld/pytorch_1699449181202/work/aten/src/ATen/native/cuda/IndexKernel.cu:92: operator(): block: [25778,0,0], thread: [42,0,0] Assertion `-sizes[i] &amp;lt;= index &amp;amp;&amp;amp; index &amp;lt; sizes[i] &amp;amp;&amp;amp; &amp;#34;index out of bounds&amp;#34;` failed.
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Try catch doesn&amp;rsquo;t work here. If anything we should try to &lt;code>assert&lt;/code> before crashing out like that&lt;/p>
+&lt;p>Moving to CPU will help debugging.&lt;/p></description></item><item><title>Running Omniparser with AutoDL Backend</title><link>https://gushroom.github.io/p/running-omniparser-with-autodl-backend/</link><pubDate>Sat, 01 Mar 2025 00:00:00 +0000</pubDate><guid>https://gushroom.github.io/p/running-omniparser-with-autodl-backend/</guid><description>&lt;p>Omniparser(&lt;a class="link" href="https://github.com/microsoft/OmniParser" target="_blank" rel="noopener"
+>https://github.com/microsoft/OmniParser&lt;/a>) provides grounding for GUI elements. This allows for fully automation and controll over devices in an agentic way.&lt;/p>
+&lt;p>clone the repo, and prepare the environment:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">cd OmniParser
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">conda create -n &amp;#34;omni&amp;#34; python==3.12
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">conda activate omni
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">pip install -r requirements.txt
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Model weights are here:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">git clone https://huggingface.co/microsoft/OmniParser
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git clone https://huggingface.co/microsoft/OmniParser-v2.0
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>BLIP and Florence models are in the &lt;code>Omniparser&lt;/code> repository, while &lt;code>v-2.0&lt;/code> has a newer YOLO detection model.&lt;/p>
+&lt;p>Put model weights under &lt;code>OmniParser/weights/&lt;/code>&lt;/p>
+&lt;p>AutoDL 的系统盘只有30G，所以把模型权重放数据盘：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-gdscript3" data-lang="gdscript3">&lt;span class="line">&lt;span class="cl">&lt;span class="err">终端中执行：&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">export&lt;/span> &lt;span class="n">HF_HOME&lt;/span>&lt;span class="o">=/&lt;/span>&lt;span class="n">root&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">autodl&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="n">tmp&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">cache&lt;/span>&lt;span class="o">/&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">或者&lt;/span>&lt;span class="n">Python代码中执行&lt;/span>&lt;span class="err">：&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">import&lt;/span> &lt;span class="n">os&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">os&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">environ&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;HF_HOME&amp;#39;&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s1">&amp;#39;/root/autodl-tmp/cache/&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>OCR的语言设置在util/utils.py&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">reader&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">easyocr&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">Reader&lt;/span>&lt;span class="p">([&lt;/span>&lt;span class="s1">&amp;#39;en&amp;#39;&lt;/span>&lt;span class="p">])&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">paddle_ocr&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">PaddleOCR&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">lang&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;en&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1"># other lang also available&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">use_angle_cls&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">False&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">use_gpu&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">False&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1"># using cuda will conflict with pytorch in the same process&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">show_log&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">False&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">max_batch_size&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="mi">1024&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">use_dilation&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">True&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1"># improves accuracy&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">det_db_score_mode&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;slow&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1"># improves accuracy&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">rec_batch_num&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="mi">1024&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>paddle的话，把en换成ch就是中英双语的了
+easy可以设置成[&amp;lsquo;ch_sim&amp;rsquo;,&amp;rsquo;en&amp;rsquo;]&lt;/p>
+&lt;p>最后把端口设置转发&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">ssh -CNg -L 6006:127.0.0.1:6006 root@connect.nmb1.seetacloud.com -p 33674
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>在本地就可以运行了
+&lt;img src="https://gushroom.github.io/p/running-omniparser-with-autodl-backend/sample_result.jpg"
+width="2206"
+height="1290"
+srcset="https://gushroom.github.io/p/running-omniparser-with-autodl-backend/sample_result_hu_681f362c78cf4d4.jpg 480w, https://gushroom.github.io/p/running-omniparser-with-autodl-backend/sample_result_hu_d797996b5628740b.jpg 1024w"
+loading="lazy"
+alt="Sample Result"
+class="gallery-image"
+data-flex-grow="171"
+data-flex-basis="410px"
+>&lt;/p></description></item><item><title>Building a Chatbot with Flet</title><link>https://gushroom.github.io/p/building-a-chatbot-with-flet/</link><pubDate>Thu, 20 Feb 2025 00:00:00 +0000</pubDate><guid>https://gushroom.github.io/p/building-a-chatbot-with-flet/</guid><description>&lt;h1 id="building-a-chatbot-with-flet">Building a Chatbot with Flet
+&lt;/h1>&lt;p>ChatGPT has becoming more and more difficult to use with VPN. So I decided to build one with API. Getting famailar with Flet(flutter) is an extra because I want to build more stuff on this platform.&lt;/p>
+&lt;h2 id="flet">Flet
+&lt;/h2>&lt;p>The interaction logic is very easy: &lt;code>onclick=function()&lt;/code>. With buttons:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;span class="lnt">9
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">send_button&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">ft&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">ElevatedButton&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">text&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;Send&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">on_click&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">send_message&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">width&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">page&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">width&lt;/span> &lt;span class="o">*&lt;/span> &lt;span class="mf">0.2&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">style&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">ft&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">ButtonStyle&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">color&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">ft&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">Colors&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">WHITE&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">bgcolor&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">ft&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">Colors&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">BLUE_400&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>To enable markdown in response, we need to replace the &lt;code>TextField&lt;/code> with a &lt;code>Markdown&lt;/code> element.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">output_box&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">ft&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">Markdown&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">value&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">selectable&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">True&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">extension_set&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">ft&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">MarkdownExtensionSet&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">GITHUB_WEB&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">on_tap_link&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">lambda&lt;/span> &lt;span class="n">e&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">page&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">launch_url&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">e&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">data&lt;/span>&lt;span class="p">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">width&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">page&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">width&lt;/span> &lt;span class="o">*&lt;/span> &lt;span class="mf">0.7&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Saving chat history and memory to local storage: &lt;code>page.client_storage.set(key, value)&lt;/code>&lt;/p>
+&lt;h2 id="llm">LLM
+&lt;/h2>&lt;p>A basic template to use LLM APIs:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="k">class&lt;/span> &lt;span class="nc">ChatBot&lt;/span>&lt;span class="p">():&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">def&lt;/span> &lt;span class="fm">__init__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">api_key&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">base_url&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">None&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">system_prompt&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">None&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">model&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;o3-mini-high&amp;#34;&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">default_system_prompt&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s2">&amp;#34;You are a helpful assistant.&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">default_base_url&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s2">&amp;#34;https://api.openai-next.com/v1&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">system_prompt&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">system_prompt&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="n">system_prompt&lt;/span> &lt;span class="k">else&lt;/span> &lt;span class="n">default_system_prompt&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">messages&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">[{&lt;/span>&lt;span class="s2">&amp;#34;role&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;system&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;content&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">system_prompt&lt;/span>&lt;span class="p">}]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">memories&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">[]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">model&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">model&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">base_url&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">base_url&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="n">base_url&lt;/span> &lt;span class="k">else&lt;/span> &lt;span class="n">default_base_url&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">client&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">OpenAI&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">api_key&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">api_key&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">base_url&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">base_url&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">def&lt;/span> &lt;span class="nf">chat&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">user_message&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">messages&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">append&lt;/span>&lt;span class="p">({&lt;/span>&lt;span class="s2">&amp;#34;role&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;user&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;content&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">user_message&lt;/span>&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">completion&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">client&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">chat&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">completions&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">create&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">model&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">model&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">stream&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">False&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">messages&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">messages&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">response&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">completion&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">choices&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">message&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">content&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">messages&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">append&lt;/span>&lt;span class="p">({&lt;/span>&lt;span class="s2">&amp;#34;role&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;assistant&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;content&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">response&lt;/span>&lt;span class="p">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">response&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item></channel></rss>
